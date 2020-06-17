@@ -49,6 +49,7 @@ import com.lantianle.app.service.DownLoadServer;
 import com.lantianle.app.service.IDownLoadServer;
 import com.lantianle.app.widget.MyDialogUtil;
 import com.lantianle.app.widget.dialog.CommonDialog;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -64,18 +65,15 @@ import cn.jzvd.JzvdStd;
         openAnimation = -1,
         closAnimatione = -1
 )
-public class VideoActivity extends IBaseActivity implements IVideoView
-{
+public class VideoActivity extends IBaseActivity implements IVideoView {
 
     public static final String VIDEO_KEY = "VIDEO_KEY";
     private static final int COMMENT_REQUEST = 101;
-//    @BindView(R.id.video_back_view)
-//    RelativeLayout back_view;
     @BindView(R.id.video_list)
     RecyclerView videoRecycleView;
 
     @BindView(R.id.videoplayer)
-    JzvdStd mJzvdStd;
+    StandardGSYVideoPlayer mJzvdStd;
 
     @BindView(R.id.video_chat_back_view)
     RelativeLayout videoChatBackView;
@@ -107,12 +105,13 @@ public class VideoActivity extends IBaseActivity implements IVideoView
     protected void onTitleClickListen(TitleBuilder.TitleButton clicked) {
         switch (clicked) {
             case LEFT:
-                if (mJzvdStd.backPress()) {
-                    return;
-                } else {
-                    videoRelease();
-                    finish();
-                }
+                // TODO: 2020/6/17  
+//                if (mJzvdStd.backPress()) {
+//                    return;
+//                } else {
+//                    videoRelease();
+//                    finish();
+//                }
 
                 break;
             case MIDDLE:
@@ -125,21 +124,16 @@ public class VideoActivity extends IBaseActivity implements IVideoView
     @Override
     protected void onResume() {
         super.onResume();
-        if (mJzvdStd!=null) {
-            if (mJzvdStd.currentState == Jzvd.CURRENT_STATE_PAUSE) {
-                mJzvdStd.onVideoResume();
-            }
-
+        if (mJzvdStd != null) {
+            mJzvdStd.onVideoResume();
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mJzvdStd!=null) {
-            if (mJzvdStd.currentState == Jzvd.CURRENT_STATE_PLAYING) {
-                mJzvdStd.onVideoPause();
-            }
+        if (mJzvdStd != null) {
+            mJzvdStd.onVideoPause();
         }
     }
 
@@ -167,10 +161,11 @@ public class VideoActivity extends IBaseActivity implements IVideoView
         public void analysis(String url) throws RemoteException {
             hideDialogLoading();
             //解析成功
-            mVideoPresenter.usedViewOrCacheNum("2",String.valueOf(mVideoInComeBean.getId()));
+            mVideoPresenter.usedViewOrCacheNum("2", String.valueOf(mVideoInComeBean.getId()));
 
             mVideoTypeAdapter.notifyDataSetChanged();
         }
+
         @Override
         public IBinder asBinder() {
             return null;
@@ -183,16 +178,16 @@ public class VideoActivity extends IBaseActivity implements IVideoView
      * @param url
      */
 
-    public void startDownLoad(String url,String name,String cover,String id) {
+    public void startDownLoad(String url, String name, String cover, String id) {
         final DownInfoModel model = new DownInfoModel();
-        if(model.findByStatus()){
+        if (model.findByStatus()) {
             showToast("其他视频正在下载");
             return;
         }
         try {
             if (null != iDownLoadServer) {
                 showDialogLoading("正在解析");
-                iDownLoadServer.start(url,name,cover,id);
+                iDownLoadServer.start(url, name, cover, id);
             }
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -213,7 +208,7 @@ public class VideoActivity extends IBaseActivity implements IVideoView
     @Override
     public void initUiAndListener() {
         ImageView v_my_head_view = (ImageView) findViewById(R.id.v_my_head_view);
-        if (UserStorage.getInstance().getHeadpic()!=null) {
+        if (UserStorage.getInstance().getHeadpic() != null) {
             GlideUtils
                     .getInstance()
                     .LoadContextCircleBitmap(mContext,
@@ -223,16 +218,16 @@ public class VideoActivity extends IBaseActivity implements IVideoView
                             R.mipmap.ic_head_l);
         }
 
-        RelativeLayout video_comment_btn = (RelativeLayout)findViewById(R.id.video_comment_btn);
+        RelativeLayout video_comment_btn = (RelativeLayout) findViewById(R.id.video_comment_btn);
         video_comment_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (UserStorage.getInstance().getSortNo() >= 2 || UserStorage.getInstance().getIsVip() == 1) {
                     Bundle bundle = new Bundle();
-                    bundle.putString(Constants.KEY_INTENT_ACTIVITY,String.valueOf(mVideoDetailBean.getData().getId()));
+                    bundle.putString(Constants.KEY_INTENT_ACTIVITY, String.valueOf(mVideoDetailBean.getData().getId()));
                     Intent intent = new Intent(VideoActivity.this, CommentActivity.class);
                     intent.putExtras(bundle);
-                    startActivityForResult(intent,COMMENT_REQUEST);
+                    startActivityForResult(intent, COMMENT_REQUEST);
                 } else {
                     MyDialogUtil.showCommonDialogDialog(VideoActivity.this, "用户等级2级才可发表评论，邀请好友就可以升级啦！", new CommonDialog.CommonDialogLisenter() {
                         @Override
@@ -268,19 +263,19 @@ public class VideoActivity extends IBaseActivity implements IVideoView
         mJzvdStd.setVisibility(View.INVISIBLE);
         mVideoPresenter = new VideoPresenter(this);
         mVideoInComeBean = (VideoInComeBean) (getIntent().getExtras().getSerializable(VIDEO_KEY));
-
-        mJzvdStd.backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (mJzvdStd.backPress()) {
-                    return;
-                } else {
-                    videoRelease();
-                    finish();
-                }
-            }
-        });
+        // TODO: 2020/6/17  
+//        mJzvdStd.backButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                if (mJzvdStd.backPress()) {
+//                    return;
+//                } else {
+//                    videoRelease();
+//                    finish();
+//                }
+//            }
+//        });
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -300,11 +295,9 @@ public class VideoActivity extends IBaseActivity implements IVideoView
         if (mVideoInComeBean.getIsCache() == 1) {
             String cache = (String) getIntent().getStringExtra("c");
             if (cache != null && cache.equals("1")) {
-                mJzvdStd.setUp(mVideoInComeBean.getVideoUrl(), mVideoInComeBean.getVideoName()
-                        , JzvdStd.SCREEN_WINDOW_FULLSCREEN);
+                mJzvdStd.setUp(mVideoInComeBean.getVideoUrl(),true, mVideoInComeBean.getVideoName());
             } else {
-                mJzvdStd.setUp(mVideoInComeBean.getVideoUrl(), mVideoInComeBean.getVideoName()
-                        , JzvdStd.SCREEN_WINDOW_NORMAL);
+                mJzvdStd.setUp(mVideoInComeBean.getVideoUrl(),true, mVideoInComeBean.getVideoName());
             }
 
 //        Glide.with(this)
@@ -313,7 +306,7 @@ public class VideoActivity extends IBaseActivity implements IVideoView
 
             Jzvd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
             Jzvd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-            mJzvdStd.startVideoFirst();
+            mJzvdStd.startPlayLogic();
         }
 
 //        videoChatEdit.setImeOptions(EditorInfo.IME_ACTION_SEND);
@@ -335,7 +328,7 @@ public class VideoActivity extends IBaseActivity implements IVideoView
 
     }
 
-    public void videoRelease (){
+    public void videoRelease() {
         Jzvd.releaseAllVideos();
         //Change these two variables back
         Jzvd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR;
@@ -346,23 +339,21 @@ public class VideoActivity extends IBaseActivity implements IVideoView
     public void refreshDetail(VideoDetailBean videoDetailBean) {
         mJzvdStd.setVisibility(View.VISIBLE);
         mVideoDetailBean = videoDetailBean;
-        if (mVideoDetailBean!=null && mVideoDetailBean.getData().getVideoName() != null) {
+        if (mVideoDetailBean != null && mVideoDetailBean.getData().getVideoName() != null) {
             mTitleBuilder.setMiddleTitleText(mVideoDetailBean.getData().getVideoName());
         }
         if (mVideoInComeBean.getIsCache() == 0) {
-            if (mVideoDetailBean.getUseView()!=null && mVideoDetailBean.getUseView().equals("1")) {
+            if (mVideoDetailBean.getUseView() != null && mVideoDetailBean.getUseView().equals("1")) {
                 mTitleBuilder.setMiddleTitleText(mVideoDetailBean.getData().getVideoName());
                 mJzvdStd.setVisibility(View.VISIBLE);
                 //        if (mVideoInComeBean.getVideoUrl() == null) {
 
                 String cache = (String) getIntent().getStringExtra("c");
                 if (cache != null && cache.equals("1")) {
-                    mJzvdStd.setUp(mVideoDetailBean.getData().getVideoUrl(), mVideoDetailBean.getData().getVideoName()
-                            , JzvdStd.SCREEN_WINDOW_FULLSCREEN);
+                    mJzvdStd.setUp(mVideoDetailBean.getData().getVideoUrl(), true,mVideoDetailBean.getData().getVideoName());
 
                 } else {
-                    mJzvdStd.setUp(mVideoDetailBean.getData().getVideoUrl(), mVideoDetailBean.getData().getVideoName()
-                            , JzvdStd.SCREEN_WINDOW_NORMAL);
+                    mJzvdStd.setUp(mVideoDetailBean.getData().getVideoUrl(), true,mVideoDetailBean.getData().getVideoName());
                 }
 
 
@@ -372,11 +363,11 @@ public class VideoActivity extends IBaseActivity implements IVideoView
 
                 Jzvd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
                 Jzvd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                mJzvdStd.startVideoFirst();
+                mJzvdStd.startPlayLogic();
                 play_view.setVisibility(View.GONE);
                 video_back_btn.setVisibility(View.GONE);
                 //TODO:扣除播放次数
-                mVideoPresenter.usedViewOrCacheNum("1",String.valueOf(mVideoInComeBean.getId()));
+                mVideoPresenter.usedViewOrCacheNum("1", String.valueOf(mVideoInComeBean.getId()));
 //        }
             } else {
                 play_view.setVisibility(View.VISIBLE);
@@ -395,32 +386,33 @@ public class VideoActivity extends IBaseActivity implements IVideoView
         }
 
 
-        mVideoTypeAdapter = new VideoTypeAdapter(videoTypeBeanList,videoDetailBean, mContext);
+        mVideoTypeAdapter = new VideoTypeAdapter(videoTypeBeanList, videoDetailBean, mContext);
         videoRecycleView.setAdapter(mVideoTypeAdapter);
 
         if (mVideoDetailBean.getData().getBannerListHead().size() > 0) {
             final HomeBannerBean bannerBean = mVideoDetailBean.getData().getBannerListHead().get(0);
-            mJzvdStd.setBannerImg(bannerBean, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    mVideoPresenter.clickAd(String.valueOf(bannerBean.getId()));
-                    jumpToTagActivity(bannerBean);
-                }
-            });
+            // TODO: 2020/6/17
+//            mJzvdStd.setBannerImg(bannerBean, new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    mVideoPresenter.clickAd(String.valueOf(bannerBean.getId()));
+//                    jumpToTagActivity(bannerBean);
+//                }
+//            });
         }
 
         mVideoTypeAdapter.setmVideoTypeAdapterLisenter(new VideoTypeAdapter.VideoTypeAdapterLisenter() {
             @Override
             //评论
             public void sendComment() {
-                ((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(0,InputMethodManager.HIDE_NOT_ALWAYS);
+                ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 if (UserStorage.getInstance().getSortNo() >= 2 || UserStorage.getInstance().getIsVip() == 1) {
                     Bundle bundle = new Bundle();
-                    bundle.putString(Constants.KEY_INTENT_ACTIVITY,String.valueOf(mVideoDetailBean.getData().getId()));
+                    bundle.putString(Constants.KEY_INTENT_ACTIVITY, String.valueOf(mVideoDetailBean.getData().getId()));
                     Intent intent = new Intent(VideoActivity.this, CommentActivity.class);
                     intent.putExtras(bundle);
-                    startActivityForResult(intent,COMMENT_REQUEST);
+                    startActivityForResult(intent, COMMENT_REQUEST);
                 } else {
                     MyDialogUtil.showCommonDialogDialog(VideoActivity.this, "用户等级2级才可发表评论，邀请好友就可以升级啦！", new CommonDialog.CommonDialogLisenter() {
                         @Override
@@ -435,13 +427,13 @@ public class VideoActivity extends IBaseActivity implements IVideoView
             @Override
             //点赞
             public void setZan() {
-                mVideoPresenter.setCareTimes(String.valueOf(mVideoDetailBean.getData().getId()),"1");
+                mVideoPresenter.setCareTimes(String.valueOf(mVideoDetailBean.getData().getId()), "1");
             }
 
             @Override
             //不点赞
             public void unSetZan() {
-                mVideoPresenter.setCareTimes(String.valueOf(mVideoDetailBean.getData().getId()),"2");
+                mVideoPresenter.setCareTimes(String.valueOf(mVideoDetailBean.getData().getId()), "2");
             }
 
             @Override
@@ -452,8 +444,8 @@ public class VideoActivity extends IBaseActivity implements IVideoView
             @Override
             public void showIntroduce(String introduce) {
                 Bundle bundle = new Bundle();
-                bundle.putString(Constants.KEY_INTENT_ACTIVITY,introduce);
-                openActivity(IntroduceActivity.class,bundle);
+                bundle.putString(Constants.KEY_INTENT_ACTIVITY, introduce);
+                openActivity(IntroduceActivity.class, bundle);
             }
 
             @Override
@@ -474,7 +466,7 @@ public class VideoActivity extends IBaseActivity implements IVideoView
 
             @Override
             public void onShare() {
-                ClipboardManager cm = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 // 将文本内容放到系统剪贴板里。
                 cm.setText(mVideoDetailBean.getData().getExtensionInfo().getExtensionContext());
                 ToastUtil.showLongToast("请分享粘贴，已复制到系统剪切板");
@@ -490,18 +482,17 @@ public class VideoActivity extends IBaseActivity implements IVideoView
             public void onStarListClick(HomeListBean homeListBean) {
                 videoRelease();
                 finish();
-                jumpToVideo(homeListBean.getId(),homeListBean.getVideoName(),homeListBean.getVideoUrl());
+                jumpToVideo(homeListBean.getId(), homeListBean.getVideoName(), homeListBean.getVideoUrl());
 
             }
 
             @Override
             public void gotoDetail(VideoLikeBean likeBean) {
-                jumpToVideo(likeBean.getId(),likeBean.getVideoName(),null);
+                jumpToVideo(likeBean.getId(), likeBean.getVideoName(), null);
             }
         });
 
         mVideoPresenter.getVideoCommon(String.valueOf(mVideoInComeBean.getId()));
-
 
 
     }
@@ -527,7 +518,7 @@ public class VideoActivity extends IBaseActivity implements IVideoView
     @Override
     public void isCanDown() {
         startDownLoad(mVideoDetailBean.getData().getVideoUrl()
-                ,mVideoDetailBean.getData().getVideoName(),mVideoDetailBean.getData().getVideoCover(),
+                , mVideoDetailBean.getData().getVideoName(), mVideoDetailBean.getData().getVideoCover(),
                 String.valueOf(mVideoDetailBean.getData().getId()));
     }
 
@@ -543,11 +534,14 @@ public class VideoActivity extends IBaseActivity implements IVideoView
     }
 
 
-    /**============================================键盘相关========================================================*/
+    /**
+     * ============================================键盘相关========================================================
+     */
     //一个静态变量存储高度
     public int keyboardHeight = 0;
     boolean isVisiableForLast = false;
     ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = null;
+
     public void addOnSoftKeyBoardVisibleListener() {
         if (keyboardHeight > 0) {
             return;
@@ -577,11 +571,11 @@ public class VideoActivity extends IBaseActivity implements IVideoView
                 if (visible && visible != isVisiableForLast) {
                     //获得键盘高度
                     keyboardHeight = hight - displayHight - statusBarHeight;
-                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)videoChatBackView.getLayoutParams();
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) videoChatBackView.getLayoutParams();
                     if (Build.BRAND.toLowerCase().contains("huawei") || Build.MANUFACTURER.equals("Huawei") || Build.BRAND.toLowerCase().contains("honor")) {
-                        layoutParams.bottomMargin =keyboardHeight+ ScreenUtil.dip2px(VideoActivity.this,10);
+                        layoutParams.bottomMargin = keyboardHeight + ScreenUtil.dip2px(VideoActivity.this, 10);
                     } else {
-                        layoutParams.bottomMargin =keyboardHeight+ScreenUtil.dip2px(VideoActivity.this,30);
+                        layoutParams.bottomMargin = keyboardHeight + ScreenUtil.dip2px(VideoActivity.this, 30);
                     }
                     videoChatBackView.setLayoutParams(layoutParams);
                     videoChatEdit.requestFocus();
@@ -610,9 +604,9 @@ public class VideoActivity extends IBaseActivity implements IVideoView
     }
 
 
-    private boolean hideKeyboard(){
-        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(inputMethodManager.isActive(videoChatEdit)){
+    private boolean hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager.isActive(videoChatEdit)) {
             return true;
         }
         return false;
@@ -633,11 +627,9 @@ public class VideoActivity extends IBaseActivity implements IVideoView
 
     @Override
     protected void onDestroy() {
-        if (mJzvdStd!=null) {
+        if (mJzvdStd != null) {
             mJzvdStd.release();
-            if (mJzvdStd.currentState == Jzvd.CURRENT_STATE_PLAYING) {
-                mJzvdStd.onVideoPause();
-            }
+            mJzvdStd.onVideoPause();
         }
         try {
             if (iDownLoadServer != null) {

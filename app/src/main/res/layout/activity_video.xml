@@ -11,7 +11,7 @@
         android:background="@color/black_color"
         android:layout_width="match_parent"
         android:layout_height="208dp">
-        <cn.jzvd.JzvdStd
+        <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
             android:id="@+id/videoplayer"
             android:layout_width="match_parent"
             android:layout_height="208dp"/>

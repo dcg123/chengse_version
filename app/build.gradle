@@ -76,11 +76,11 @@ android {
         abortOnError false
     }
 
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.lantianle.app"
         minSdkVersion 19
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -107,14 +107,10 @@ android {
 //            keyPassword 'abc123456'
 //        }
         release {
-            storeFile file('C:\\Users\\root\\Desktop\\money\\move.jks')
+            storeFile file('move.jks')
             storePassword '123456'
             keyPassword '123456'
             keyAlias = 'key0'
-//            storeFile file("D:/lantianle/chengse_version5.14 (2)/chengse_version/app/baby.jks")
-//            storePassword 'abc123'
-//            keyAlias 'baby'
-//            keyPassword 'abc123456'
         }
 
     }
@@ -146,6 +142,11 @@ android {
                 }
             }
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
 }
@@ -180,4 +181,8 @@ dependencies {
     implementation 'com.jwkj:M3U8Manger:v2.3.1'
 //    implementation 'com.github.Jay-Goo:M3U8Downloader:V1.0.8'
     implementation 'com.github.huangdali:HPermission:v1.0.4'
+    implementation 'com.shuyu:GSYVideoPlayer:6.0.3'
+
+
+
 }

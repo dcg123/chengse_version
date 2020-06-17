@@ -1,2 +1,5 @@
 # Project exclude paths
 /jiaozivideoplayer/build/
+*.iml
+**/*.iml
+.idea
