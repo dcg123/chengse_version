@@ -1225,13 +1225,14 @@ public final class R {
         public static int v_gray_borders = 0x7f0900ec;
         public static int video_progress_bar = 0x7f0900ed;
         public static int video_progress_bar_background = 0x7f0900ee;
-        public static int wheel_bg = 0x7f0900f1;
-        public static int wheel_val = 0x7f0900f2;
-        public static int white_corners = 0x7f0900f3;
-        public static int widget_tab_channel_bg = 0x7f0900f4;
-        public static int widget_tab_find_bg = 0x7f0900f5;
-        public static int widget_tab_home_bg = 0x7f0900f6;
-        public static int widget_tab_mine_bg = 0x7f0900f7;
+        public static int vip_borders = 0x7f0900ef;
+        public static int wheel_bg = 0x7f0900f2;
+        public static int wheel_val = 0x7f0900f3;
+        public static int white_corners = 0x7f0900f4;
+        public static int widget_tab_channel_bg = 0x7f0900f5;
+        public static int widget_tab_find_bg = 0x7f0900f6;
+        public static int widget_tab_home_bg = 0x7f0900f7;
+        public static int widget_tab_mine_bg = 0x7f0900f8;
     }
     public static final class id {
         private id() {}

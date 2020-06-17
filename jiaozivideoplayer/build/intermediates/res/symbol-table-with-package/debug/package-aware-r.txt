@@ -1235,6 +1235,7 @@ drawable update_corner
 drawable v_gray_borders
 drawable video_progress_bar
 drawable video_progress_bar_background
+drawable vip_borders
 drawable volume_close
 drawable volume_open
 drawable wheel_bg

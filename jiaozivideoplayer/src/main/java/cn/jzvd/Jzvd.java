@@ -942,6 +942,16 @@ public abstract class Jzvd extends FrameLayout implements View.OnClickListener, 
                 if (progress != 0) progressBar.setProgress(progress);
             }
         }
+        if (position>60000){
+            JZMediaManager.seekTo(60000);
+            JZMediaManager.pause();
+            //弹出充值款
+
+        }else{
+            if (JZMediaManager.isPlaying()){
+                JZMediaManager.start();
+            }
+        }
         if (position != 0) currentTimeTextView.setText(JZUtils.stringForTime(position));
         totalTimeTextView.setText(JZUtils.stringForTime(duration));
     }

@@ -24,12 +24,12 @@ public class UrlConstants {
      * base url
      **************/
 
-//    private static String BASE_URL = "http://118.24.207.96:8283";
-    private static String BASE_URL = "http://118.24.207.96:8284";
-
+//    private static String BASE_URL = "http://xg.xag55.com:80";
+//    private static String BASE_URL = "http://api.329133.com:8080";
+    private static String BASE_URL = "http://dcgg.viphk.ngrok.org/";
+//    private static String BASE_URL = "http://118.24.207.96:8284";
     public static final String NEW_BASE_URL = BASE_URL + "/";
     public static final String DIAMOND_URL = "http://www.baidu.com";
-
     public static final String FEED_BAKK_URL = "http://www.baidu.com";
 
 }

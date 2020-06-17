@@ -70,9 +70,6 @@ public class AES256 {
             cipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] byteContent = content.getBytes("utf-8");
             byte[] cryptograph = cipher.doFinal(byteContent);
-
-
-
             return Base64.encodeToByte(cryptograph);
 
         } catch (Exception e) {  
@@ -81,19 +78,27 @@ public class AES256 {
         return null;  
     }  
   
-    public static String decrypt(byte[] cryptograph, String password){  
+    public  String decrypt(byte[] cryptograph, String password){
         try {  
-        	 AllowAes256BitKeys.fixKeyLength();
+            AllowAes256BitKeys.fixKeyLength();
+            //"AES"：请求的密钥算法的标准名称
             KeyGenerator kgen = KeyGenerator.getInstance("AES");
+            //256：密钥生成参数；securerandom：密钥生成器的随机源
             SecureRandom securerandom = new SecureRandom(tohash256Deal(password));
             kgen.init(256, securerandom);
+            //生成秘密（对称）密钥
             SecretKey secretKey = kgen.generateKey();
-            Security.addProvider(new BouncyCastleProvider());
+            //返回基本编码格式的密钥
             byte[] enCodeFormat = secretKey.getEncoded();
+            //根据给定的字节数组构造一个密钥。enCodeFormat：密钥内容；"AES"：与给定的密钥内容相关联的密钥算法的名称
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding", "BC");
+            //将提供程序添加到下一个可用位置
+            Security.addProvider(new BouncyCastleProvider());
+
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding", "BC");
             cipher.init(Cipher.DECRYPT_MODE, key);
-            byte[] content = cipher.doFinal(Base64.decode(cryptograph));
+            byte[] cryptograph64 = Base64.decode(cryptograph);
+            byte[] content = cipher.doFinal(cryptograph64);
 
             return new String(content);  
         } catch (Exception e) {  
@@ -154,18 +159,19 @@ public class AES256 {
     
     public static void main(String[] args) throws Exception {  
   
-//        String content = "0f607264fc6318a92b9e13c65db7cd3c1332444444444444444444444444444444444444444444444444444";
+        String content = "1";
         final String password = "zsyy";
-//        System.out.println("明文：" + content);
-//        System.out.println("key：" + password);
-//        final byte[] encryptResult = AES256.encrypt(content,password);
-        final String miwen ="444B584D555A363876507835523273413272346E545577316B7734623932584E46302F77346741314433577461466F3949524A54796C6C7857642F75644A626A7A4B636C2B534476736354786F716D37796333352F4D796E4A666B673737484538614B7075386E4E2B667A6D53443245726F726D486E6F716F72542F4C697775";
-        System.out.println("密文：" + miwen);
+        System.out.println("明文：" + content);
+        System.out.println("key：" + password);
+        final byte[] encryptResult = AES256.encrypt(content,password);
+//        final String miwen ="444B584D555A363876507835523273413272346E545577316B7734623932584E46302F77346741314433577461466F3949524A54796C6C7857642F75644A626A7A4B636C2B534476736354786F716D37796333352F4D796E4A666B673737484538614B7075386E4E2B667A6D53443245726F726D486E6F716F72542F4C697775";
+//        System.out.println("密文：" + miwen);
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String decryptResult = AES256.decrypt(parseHexStr2Byte(miwen), password);
+                AES256 aes256 = new AES256();
+                String decryptResult = aes256.decrypt(encryptResult, password);
                 System.out.println("解密：" + decryptResult);
             }
         });
@@ -246,27 +252,28 @@ public class AES256 {
     public static String decrypt(String data)
     {
 
-//        byte[] bytes = data.getBytes();
-////        System.out.println("密文：" + AES256.parseByte2HexStr(data));
-//        String decryptResult = AES256.decrypt(bytes, Npassword);
-//        return decryptResult;
+        byte[] bytes = data.getBytes();
+        AES256 aes256 = new AES256();
+//        System.out.println("密文：" + AES256.parseByte2HexStr(data));
+        String decryptResult = aes256.decrypt(bytes, Npassword);
+        return decryptResult;
 
-        byte[] msg = parseHexStr2Byte(data);
-        AllowAes256BitKeys.fixKeyLength();
-//        RNCryptorNative rnCryptorNative = new RNCryptorNative();
-//        return new String(rnCryptorNative.decrypt(msg,password));
-        //      AllowAes256BitKeys.fixKeyLength();
-     JNCryptor cryptor = new AES256JNCryptor();
-     try
-     {
-    	 return (new String(cryptor.decryptData(msg, Npassword.toCharArray())));
-     }
-     catch (CryptorException e)
-     {
-      // Something went wrong
-      e.printStackTrace();
-      return null;
-     }
+//        byte[] msg = parseHexStr2Byte(data);
+//        AllowAes256BitKeys.fixKeyLength();
+////        RNCryptorNative rnCryptorNative = new RNCryptorNative();
+////        return new String(rnCryptorNative.decrypt(msg,password));
+//        //      AllowAes256BitKeys.fixKeyLength();
+//     JNCryptor cryptor = new AES256JNCryptor();
+//     try
+//     {
+//    	 return (new String(cryptor.decryptData(msg, Npassword.toCharArray())));
+//     }
+//     catch (CryptorException e)
+//     {
+//      // Something went wrong
+//      e.printStackTrace();
+//      return null;
+//     }
     }
 
 //    private static String decrypt(byte[] msg)

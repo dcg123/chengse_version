@@ -66,41 +66,47 @@ public class JsonResponseBodyConverter <T> implements Converter<ResponseBody, T>
             JsonReader jsonReader = null;
             MediaType mediaType = value.contentType();
             Charset charset = mediaType != null ? mediaType.charset(Util.UTF_8) : Util.UTF_8;
-            if (isHasData) {
-                Object rsaData2 = AES256.decrypt(dataObj);
-                try {
-                    Object json = new JSONTokener((String) rsaData2).nextValue();
-                    if (json instanceof Map) {
-                        JSONObject jsonrsaData = new JSONObject((Map) json);
-                        jsonObject.put("data",jsonrsaData);
-                        InputStream inputStream = new ByteArrayInputStream(jsonObject.toString().getBytes());
-                        jsonReader = gson.newJsonReader(new InputStreamReader(inputStream, charset));
-                        return adapter.read(jsonReader);
-                    } else if (json instanceof JSONArray) {
-                        JSONArray jsonrsaData = (JSONArray)json;
-                        jsonObject.put("data",jsonrsaData);
-                        InputStream inputStream = new ByteArrayInputStream(jsonObject.toString().getBytes());
-                        jsonReader = gson.newJsonReader(new InputStreamReader(inputStream, charset));
-                        return adapter.read(jsonReader);
-                    } else if (json instanceof JSONObject) {
-                        JSONObject jsonrsaData =  (JSONObject)json;
-                        jsonObject.put("data",jsonrsaData);
-                        InputStream inputStream = new ByteArrayInputStream(jsonObject.toString().getBytes());
-                        jsonReader = gson.newJsonReader(new InputStreamReader(inputStream, charset));
-                        return adapter.read(jsonReader);
-                    }
-                    InputStream inputStream = new ByteArrayInputStream(jsonObject.toString().getBytes());
-                    jsonReader = gson.newJsonReader(new InputStreamReader(inputStream, charset));
-                    return adapter.read(jsonReader);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return adapter.read(jsonReader);
-            } else {
-                InputStream inputStream = new ByteArrayInputStream(response.getBytes());
-                jsonReader = gson.newJsonReader(new InputStreamReader(inputStream, charset));
-                return adapter.read(jsonReader);
-            }
+//            if (isHasData) {
+//                Object rsaData2 = AES256.decrypt(dataObj);
+//                try {
+//                    Object json = new JSONTokener((String) rsaData2).nextValue();
+//                    if (json instanceof Map) {
+//                        JSONObject jsonrsaData = new JSONObject((Map) json);
+//                        jsonObject.put("data",jsonrsaData);
+//                        InputStream inputStream = new ByteArrayInputStream(jsonObject.toString().getBytes());
+//                        jsonReader = gson.newJsonReader(new InputStreamReader(inputStream, charset));
+//                        return adapter.read(jsonReader);
+//                    } else if (json instanceof JSONArray) {
+//                        JSONArray jsonrsaData = (JSONArray)json;
+//                        jsonObject.put("data",jsonrsaData);
+//                        InputStream inputStream = new ByteArrayInputStream(jsonObject.toString().getBytes());
+//                        jsonReader = gson.newJsonReader(new InputStreamReader(inputStream, charset));
+//                        return adapter.read(jsonReader);
+//                    } else if (json instanceof JSONObject) {
+//                        JSONObject jsonrsaData =  (JSONObject)json;
+//                        jsonObject.put("data",jsonrsaData);
+//                        InputStream inputStream = new ByteArrayInputStream(jsonObject.toString().getBytes());
+//                        jsonReader = gson.newJsonReader(new InputStreamReader(inputStream, charset));
+//                        return adapter.read(jsonReader);
+//                    }
+//                    InputStream inputStream = new ByteArrayInputStream(jsonObject.toString().getBytes());
+//                    jsonReader = gson.newJsonReader(new InputStreamReader(inputStream, charset));
+//                    return adapter.read(jsonReader);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                return adapter.read(jsonReader);
+//                InputStream inputStream = new ByteArrayInputStream(response.getBytes());
+//                jsonReader = gson.newJsonReader(new InputStreamReader(inputStream, charset));
+//                return adapter.read(jsonReader);
+//            } else {
+//                InputStream inputStream = new ByteArrayInputStream(response.getBytes());
+//                jsonReader = gson.newJsonReader(new InputStreamReader(inputStream, charset));
+//                return adapter.read(jsonReader);
+//            }
+            InputStream inputStream = new ByteArrayInputStream(response.getBytes());
+            jsonReader = gson.newJsonReader(new InputStreamReader(inputStream, charset));
+            return adapter.read(jsonReader);
         } finally {
             value.close();
         }

@@ -78,9 +78,9 @@ android {
 
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.babyvideo.app"
+        applicationId "com.lantianle.app"
         minSdkVersion 19
-        targetSdkVersion 22
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -88,18 +88,35 @@ android {
     }
 
     signingConfigs {
-        debug {
-            storeFile file("babyv.jks")
-            storePassword '111111'
-            keyAlias 'qian'
-            keyPassword '111111'
-        }
+//        debug {
+//            storeFile file("babyv2.jks")
+//            storePassword '111111'
+//            keyAlias 'qian'
+//            keyPassword '111111'
+//        }
+//        release {
+//            storeFile file("babyv2.jks")
+//            storePassword '111111'
+//            keyAlias ''
+//            keyPassword '11qian1111'
+//        }
+//        debug {
+//            storeFile file("baby.jks")
+//            storePassword 'abc123'
+//            keyAlias 'baby'
+//            keyPassword 'abc123456'
+//        }
         release {
-            storeFile file("babyv.jks")
-            storePassword '111111'
-            keyAlias 'qian'
-            keyPassword '111111'
+            storeFile file('C:\\Users\\root\\Desktop\\money\\move.jks')
+            storePassword '123456'
+            keyPassword '123456'
+            keyAlias = 'key0'
+//            storeFile file("D:/lantianle/chengse_version5.14 (2)/chengse_version/app/baby.jks")
+//            storePassword 'abc123'
+//            keyAlias 'baby'
+//            keyPassword 'abc123456'
         }
+
     }
 
 
@@ -157,6 +174,7 @@ dependencies {
 
     implementation project(path: ':thunder')
     implementation 'com.google.zxing:core:3.3.0'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     //multidex
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.jwkj:M3U8Manger:v2.3.1'
